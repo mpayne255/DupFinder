@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DupFinder.Domain", "DupFind
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DupFinder.Application", "DupFinder.Application\DupFinder.Application.csproj", "{1DB4B411-16BD-4134-8EDF-41032623524E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DupFinder.Infrastructure", "DupFinder.Hashing\DupFinder.Infrastructure.csproj", "{85992B29-C850-4A76-8AF7-D3FC885AB4F3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DupFinder.Infrastructure", "DupFinder.Infrastructure\DupFinder.Infrastructure.csproj", "{85992B29-C850-4A76-8AF7-D3FC885AB4F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DupFinder.Tests", "DupFinder.Tests\DupFinder.Tests.csproj", "{9EFAA1DE-69A7-43F6-BAE5-91BE55E3FCEC}"
 EndProject

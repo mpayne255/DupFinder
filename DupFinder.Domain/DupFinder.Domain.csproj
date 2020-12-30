@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DupFinder.Hashing\DupFinder.Infrastructure.csproj" />
+    <ProjectReference Include="..\DupFinder.Infrastructure\DupFinder.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

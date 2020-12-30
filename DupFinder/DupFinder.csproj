@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DupFinder.Application\DupFinder.Application.csproj" />
     <ProjectReference Include="..\DupFinder.Domain\DupFinder.Domain.csproj" />
+    <ProjectReference Include="..\DupFinder.Infrastructure\DupFinder.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

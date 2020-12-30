@@ -76,6 +76,11 @@ namespace DupFinder.Domain
                 }
             }
 
+            if (config.Directories.Count == 0)
+            {
+                config.Directories.Add(".");
+            }
+
             config.ShowUsage = false;
 
             return config;

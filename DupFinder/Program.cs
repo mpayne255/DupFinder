@@ -1,4 +1,6 @@
 ﻿using DupFinder.Application;
+using DupFinder.Application.Services.Implementation;
+using DupFinder.Application.Services.Interfaces;
 using DupFinder.Domain;
 using DupFinder.Infrastructure.Hashing.Implementation;
 using DupFinder.Infrastructure.Hashing.Interfaces;
@@ -27,15 +29,16 @@ namespace DupFinder
             serviceCollection.AddSingleton(config);
 
             serviceCollection.AddTransient<IHashAlgorithm, MD5HashAlgorithm>();
-            serviceCollection.AddSingleton<IOutputSerializer<Bucket>>(serviceProvider =>
+            serviceCollection.AddTransient<IDuplicateService, DuplicateService>();
+            serviceCollection.AddSingleton<IOutputSerializer<DuplicateResult>>(serviceProvider =>
             {
                 var configuration = serviceProvider.GetService<Configuration>();
 
                 return configuration.OutputMode switch
                 {
-                    Domain.Enums.OutputMode.Json => new JsonOutputSerializer<Bucket>(),
-                    Domain.Enums.OutputMode.Xml => new XmlOutputSerializer<Bucket>(),
-                    _ => new StringOutputSerializer<Bucket>(),
+                    Domain.Enums.OutputMode.Json => new JsonOutputSerializer<DuplicateResult>(),
+                    Domain.Enums.OutputMode.Xml => new XmlOutputSerializer<DuplicateResult>(),
+                    _ => new StringOutputSerializer<DuplicateResult>(),
                 };
             });
             serviceCollection.AddTransient<ConsoleApp>();

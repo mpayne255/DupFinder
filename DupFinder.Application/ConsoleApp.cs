@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using DupFinder.Domain;
-using DupFinder.Domain.Enums;
 using DupFinder.Hashing.Interfaces;
 
 namespace DupFinder.Application

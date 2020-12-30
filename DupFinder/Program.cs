@@ -1,5 +1,4 @@
-﻿using System;
-using DupFinder.Application;
+﻿using DupFinder.Application;
 using DupFinder.Hashing.Implementation;
 using DupFinder.Hashing.Interfaces;
 using Microsoft.Extensions.DependencyInjection;

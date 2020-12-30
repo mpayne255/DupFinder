@@ -11,15 +11,16 @@ namespace DupFinder.Domain
         public OutputMode OutputMode { get; set; } = OutputMode.Console;
         public string OutputTarget { get; set; }
         public bool IncludeEmpty { get; set; } = false;
+        public bool ShowUsage { get; set; } = true;
 
         public static Configuration Build(string[] args)
         {
+            var config = new Configuration();
+
             if (args == null || args.Length == 0)
             {
-                return null;
+                return config;
             }
-
-            var config = new Configuration();
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -74,6 +75,8 @@ namespace DupFinder.Domain
                         break;
                 }
             }
+
+            config.ShowUsage = false;
 
             return config;
         }

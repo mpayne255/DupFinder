@@ -7,6 +7,6 @@ namespace DupFinder.Infrastructure.Serialization.Interfaces
 {
     public interface IOutputSerializer<T>
     {
-        void Write(T value);
+        void Write(StreamWriter streamWriter, T value);
     }
 }

@@ -16,19 +16,22 @@ namespace DupFinder.Application
         private Configuration _configuration;
         private IHashAlgorithm _hashAlgorithm;
         private IOutputSerializer<Bucket> _outputSerializer;
+        private StreamWriter _writer;
 
         public ConsoleApp(IHashAlgorithm hashAlgorithm, IOutputSerializer<Bucket> serializer, Configuration configuration)
         {
             _hashAlgorithm = hashAlgorithm;
             _outputSerializer = serializer;
             _configuration = configuration;
+
+            _writer = GetStreamWriter();
         }
 
         public void Run(string[] args)
         {
             _allItems = new ConcurrentDictionary<string, Bucket>();
 
-            if (_configuration == null)
+            if (_configuration.ShowUsage)
             {
                 ShowUsage();
                 return;
@@ -42,9 +45,25 @@ namespace DupFinder.Application
 
             Console.WriteLine($"Elapsed time(ms): {stopwatch.ElapsedMilliseconds}");
 
+            // TODO: Need to replace this with a call to serialize a single object that has all the buckets in a property
             foreach (var result in results)
             {
-                _outputSerializer.Write(result);
+                _outputSerializer.Write(_writer, result);
+            }
+
+            _writer.Flush();
+        }
+
+        private StreamWriter GetStreamWriter()
+        {
+            switch(_configuration.OutputMode)
+            {
+                default:
+                case Domain.Enums.OutputMode.Console:
+                    return new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
+                case Domain.Enums.OutputMode.Json:
+                case Domain.Enums.OutputMode.Xml:
+                    return new StreamWriter(_configuration.OutputTarget);
             }
         }
 

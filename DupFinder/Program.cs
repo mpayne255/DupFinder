@@ -25,6 +25,7 @@ namespace DupFinder
             var config = Configuration.Build(args);
 
             serviceCollection.AddSingleton(config);
+
             serviceCollection.AddTransient<IHashAlgorithm, MD5HashAlgorithm>();
             serviceCollection.AddSingleton<IOutputSerializer<Bucket>>(serviceProvider =>
             {
@@ -34,7 +35,7 @@ namespace DupFinder
                 {
                     Domain.Enums.OutputMode.Json => new JsonOutputSerializer<Bucket>(),
                     Domain.Enums.OutputMode.Xml => new XmlOutputSerializer<Bucket>(),
-                    _ => new ConsoleOutputSerializer<Bucket>(),
+                    _ => new StringOutputSerializer<Bucket>(),
                 };
             });
             serviceCollection.AddTransient<ConsoleApp>();

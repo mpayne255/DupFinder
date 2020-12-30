@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Xml.Serialization;
+﻿using System.IO;
 using DupFinder.Infrastructure.Serialization.Interfaces;
+using XSerializer;
 
 namespace DupFinder.Infrastructure.Serialization.Implementation
 {
     public class XmlOutputSerializer<T> : IOutputSerializer<T>
     {
-        // TODO: this won't currently work with the Bucket class due to serialization error
-        private XmlSerializer _serializer = new XmlSerializer(typeof(T));
+        private XmlSerializer<T> _serializer = new XmlSerializer<T>(options => options.Indent());
 
         public void Write(StreamWriter streamWriter, T value)
         {

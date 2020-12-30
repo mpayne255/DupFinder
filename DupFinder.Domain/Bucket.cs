@@ -12,7 +12,7 @@ namespace DupFinder.Domain
 
         public override string ToString()
         {
-            var stringBuilder = new StringBuilder($"+-------------------------------------------{Environment.NewLine}");
+            var stringBuilder = new StringBuilder($"+------------------------------------------------------------------------------{Environment.NewLine}");
 
             foreach (var duplicate in Duplicates.OrderBy(d => d.FullName))
             {

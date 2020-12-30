@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace DupFinder.Hashing.Interfaces
+namespace Infrastructure.Interfaces
 {
     public interface IHashAlgorithm
     {

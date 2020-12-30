@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using DupFinder.Hashing.Interfaces;
+using Infrastructure.Interfaces;
 
 namespace DupFinder.Domain
 {

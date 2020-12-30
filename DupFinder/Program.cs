@@ -1,6 +1,6 @@
 ﻿using DupFinder.Application;
-using DupFinder.Hashing.Implementation;
-using DupFinder.Hashing.Interfaces;
+using Infrastructure.Implementation;
+using Infrastructure.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DupFinder

@@ -1,5 +1,5 @@
 using DupFinder.Application;
-using DupFinder.Hashing.Interfaces;
+using Infrastructure.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 

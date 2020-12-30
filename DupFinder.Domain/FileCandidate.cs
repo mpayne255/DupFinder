@@ -41,12 +41,7 @@ namespace DupFinder.Domain
         {
             if (other == null) throw new ArgumentNullException(nameof(other));
             
-            if (Size != other.Size)
-            {
-                return Size.CompareTo(other.Size);
-            }
-
-            return FileHash.CompareTo(other.FileHash);
+            return FullName.CompareTo(other.FullName);
         }
 
         private void Initialize()

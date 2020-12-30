@@ -7,11 +7,12 @@ namespace DupFinder.Tests
     public class ConfigurationTests
     {
         [TestMethod]
-        public void Configuration_NoArguments_ReturnsNull()
+        public void Configuration_NoArguments_ShowUsage()
         {
             var config = Configuration.Build(new string[] { });
-            
-            Assert.IsNull(config);
+
+            Assert.IsNotNull(config);
+            Assert.IsTrue(config.ShowUsage);
         }
 
         [TestMethod]
@@ -28,6 +29,7 @@ namespace DupFinder.Tests
             });
 
             Assert.IsNotNull(config);
+            Assert.IsFalse(config.ShowUsage);
             Assert.AreEqual("myOutputFile.xml", config.OutputTarget);
             Assert.AreEqual(Domain.Enums.OutputMode.Xml, config.OutputMode);
             Assert.AreEqual(Domain.Enums.DetectionMode.File, config.Mode);
@@ -46,6 +48,7 @@ namespace DupFinder.Tests
             });
 
             Assert.IsNotNull(config);
+            Assert.IsFalse(config.ShowUsage);
             Assert.IsNull(config.OutputTarget);
             Assert.AreEqual(Domain.Enums.OutputMode.Console, config.OutputMode);
             Assert.AreEqual(Domain.Enums.DetectionMode.File, config.Mode);

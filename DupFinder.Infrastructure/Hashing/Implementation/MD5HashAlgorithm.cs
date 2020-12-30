@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
-using Infrastructure.Interfaces;
+using DupFinder.Infrastructure.Hashing.Interfaces;
 
-namespace Infrastructure.Implementation
+namespace DupFinder.Infrastructure.Hashing.Implementation
 {
     public class MD5HashAlgorithm : IHashAlgorithm
     {

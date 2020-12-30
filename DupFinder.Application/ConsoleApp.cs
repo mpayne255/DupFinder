@@ -5,26 +5,28 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using DupFinder.Domain;
-using Infrastructure.Interfaces;
+using DupFinder.Infrastructure.Hashing.Interfaces;
+using DupFinder.Infrastructure.Serialization.Interfaces;
 
 namespace DupFinder.Application
 {
     public class ConsoleApp
     {
-        protected ConcurrentDictionary<string, Bucket> _allItems;
-        protected Configuration _configuration;
-        protected IHashAlgorithm _hashAlgorithm;
+        private ConcurrentDictionary<string, Bucket> _allItems;
+        private Configuration _configuration;
+        private IHashAlgorithm _hashAlgorithm;
+        private IOutputSerializer<Bucket> _outputSerializer;
 
-        public ConsoleApp(IHashAlgorithm hashAlgorithm)
+        public ConsoleApp(IHashAlgorithm hashAlgorithm, IOutputSerializer<Bucket> serializer, Configuration configuration)
         {
             _hashAlgorithm = hashAlgorithm;
+            _outputSerializer = serializer;
+            _configuration = configuration;
         }
 
         public void Run(string[] args)
         {
             _allItems = new ConcurrentDictionary<string, Bucket>();
-
-            _configuration = GetConfiguration(args);
 
             if (_configuration == null)
             {
@@ -38,25 +40,12 @@ namespace DupFinder.Application
 
             stopwatch.Stop();
 
-            // TODO: Replace output with use of IOutputSerializer
-
             Console.WriteLine($"Elapsed time(ms): {stopwatch.ElapsedMilliseconds}");
 
             foreach (var result in results)
             {
-                Console.WriteLine("+-------");
-
-                foreach (var fsInfo in result.OrderBy(fsInfo => fsInfo.FullName))
-                {
-                    Console.WriteLine(fsInfo.FullName);
-                }
+                _outputSerializer.Write(result);
             }
-        }
-
-        public Configuration GetConfiguration(string[] args)
-        {
-            var config = Configuration.Build(args);
-            return config;
         }
 
         public void ShowUsage()
@@ -70,7 +59,7 @@ namespace DupFinder.Application
             Console.WriteLine("   --include-empty -i     include empty files/directories (excluded by default)");
         }
 
-        public IEnumerable<ConcurrentBag<FileCandidate>> GetDuplicates()
+        public IEnumerable<Bucket> GetDuplicates()
         {
             _configuration.Directories.AsParallel().ForAll(path =>
             {
@@ -78,7 +67,7 @@ namespace DupFinder.Application
             });
 
             var duplicates = _allItems.Where(kvp => kvp.Value.Duplicates.Count > 1)
-                .Select(kvp => kvp.Value.Duplicates);
+                .Select(kvp => kvp.Value);
             return duplicates;
         }
 
@@ -90,35 +79,28 @@ namespace DupFinder.Application
 
             results.AsParallel().ForAll(fsInfo =>
             {
-                try
+                if (fsInfo.Attributes.HasFlag(FileAttributes.Directory))
                 {
-                    if (fsInfo.Attributes.HasFlag(FileAttributes.Directory))
-                    {
-                        FindRecursive(fsInfo.FullName);
-                    }
-                    else
-                    {
-                        var info = new FileCandidate(fsInfo.FullName, _hashAlgorithm);
-                        if (info.Size > 0 || (info.Size == 0 && _configuration.IncludeEmpty))
-                        {
-                            _allItems.AddOrUpdate(info.FileHash, newBucket =>
-                                new Bucket 
-                                { 
-                                    BucketID = info.FileHash,
-                                    Duplicates = new ConcurrentBag<FileCandidate>(new[] { info })
-                                },
-                                (sig, bucket) =>
-                                {
-                                    bucket.Duplicates.Add(info);
-                                    return bucket;
-                                }
-                            );
-                        }
-                    }
+                    FindRecursive(fsInfo.FullName);
                 }
-                catch
+                else
                 {
-                    // TODO: log error...
+                    var info = new FileCandidate(fsInfo.FullName, _hashAlgorithm);
+                    if (info.Size > 0 || (info.Size == 0 && _configuration.IncludeEmpty))
+                    {
+                        _allItems.AddOrUpdate(info.FileHash, newBucket =>
+                            new Bucket
+                            {
+                                BucketID = info.FileHash,
+                                Duplicates = new ConcurrentBag<FileCandidate>(new[] { info })
+                            },
+                            (sig, bucket) =>
+                            {
+                                bucket.Duplicates.Add(info);
+                                return bucket;
+                            }
+                        );
+                    }
                 }
             });
         }

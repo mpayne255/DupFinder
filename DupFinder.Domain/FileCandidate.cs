@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Infrastructure.Interfaces;
+using DupFinder.Infrastructure.Hashing.Interfaces;
 
 namespace DupFinder.Domain
 {
@@ -46,7 +46,7 @@ namespace DupFinder.Domain
                 return Size.CompareTo(other.Size);
             }
 
-            return FileHash.CompareTo(GetSignature(other.FullName));
+            return FileHash.CompareTo(other.FileHash);
         }
 
         private void Initialize()

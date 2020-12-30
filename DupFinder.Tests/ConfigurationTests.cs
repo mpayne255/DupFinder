@@ -1,7 +1,5 @@
-using DupFinder.Application;
-using Infrastructure.Interfaces;
+using DupFinder.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 
 namespace DupFinder.Tests
 {
@@ -11,10 +9,7 @@ namespace DupFinder.Tests
         [TestMethod]
         public void Configuration_NoArguments_ReturnsNull()
         {
-            var mockHash = new Mock<IHashAlgorithm>();
-            var app = new ConsoleApp(mockHash.Object);
-
-            var config = app.GetConfiguration(new string[] { });
+            var config = Configuration.Build(new string[] { });
             
             Assert.IsNull(config);
         }
@@ -22,10 +17,7 @@ namespace DupFinder.Tests
         [TestMethod]
         public void Configuration_SetAllValues()
         {
-            var mockHash = new Mock<IHashAlgorithm>();
-            var app = new ConsoleApp(mockHash.Object);
-
-            var config = app.GetConfiguration(new[]
+            var config = Configuration.Build(new[]
             {
                 "-o", "myOutputFile.xml",
                 "-om", "Xml",
@@ -47,10 +39,7 @@ namespace DupFinder.Tests
         [TestMethod]
         public void Configuration_SetDirectoriesOnly_HasDefaults()
         {
-            var mockHash = new Mock<IHashAlgorithm>();
-            var app = new ConsoleApp(mockHash.Object);
-
-            var config = app.GetConfiguration(new[]
+            var config = Configuration.Build(new[]
             {
                 @"C:\MyDirectory1",
                 @"C:\MyDirectory2"
